@@ -1,21 +1,15 @@
 import dbConnect from "@/libs/db_connector";
-import * as z from 'zod'
+import { BandRequestInput, sanitizeBandsObject } from "@/libs/validation/band";
 import BandModel, { IBand } from "@/models/Band";
 import { NextResponse } from "next/server";
 
-const sanitizeBandsObject = z.object({
-    name: z.string().min(1),
-    genre: z.string().optional(),
-    description: z.string().optional(),
-    image: z.string().url().optional(),
-})
 
 
 
 export async function GET() {
   await dbConnect();
   try {
-    const bands = await BandModel.find({});
+    const bands = await BandModel.find({}).populate("members");;
     return NextResponse.json(bands, { status: 200 });
   } catch (err) {
     return NextResponse.json(
@@ -31,8 +25,8 @@ export async function POST(req: Request) {
     await dbConnect()
 
     try {
-        const unsinitizedRequest = await req.json();
-        const sanitizedBandsObject = sanitizeBandsObject.parse(unsinitizedRequest);
+        const unsinitizedRequest:Request = await req.json();
+        const sanitizedBandsObject:BandRequestInput = sanitizeBandsObject.parse(unsinitizedRequest);
 
         const band = await BandModel.create(sanitizedBandsObject)
 
