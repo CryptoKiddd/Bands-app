@@ -13,5 +13,5 @@ const BandSchema = new Schema<IBand>({
     image:{type:String},
 },{timestamps:true});
 
-const Band: Model<IBand> = mongoose.models.Band || mongoose.model<IBand>('Band', BandSchema);
-export default Band;
+const BandModel: Model<IBand> = mongoose.models.BandModel || mongoose.model<IBand>('BandModel', BandSchema);
+export default BandModel;
