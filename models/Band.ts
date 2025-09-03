@@ -1,17 +1,23 @@
-import mongoose, {Model, Schema, Document } from 'mongoose';
+import mongoose, { Model, Schema, Document } from "mongoose";
 
-interface IBand extends Document {
-    name:String,
-    genre?:String,
-    description?:String,
-    image?:String,
+export interface IBand extends Document {
+  name: string;
+  genre?: string;
+  description?: string;
+  image?: string;
 }
-const BandSchema = new Schema<IBand>({
-    name:{type:String, required:true},
-    genre:{type:String},
-    description:{type:String},
-    image:{type:String},
-},{timestamps:true});
 
-const BandModel: Model<IBand> = mongoose.models.BandModel || mongoose.model<IBand>('BandModel', BandSchema);
+const BandSchema = new Schema<IBand>(
+  {
+    name: { type: String, required: true },
+    genre: { type: String },
+    description: { type: String },
+    image: { type: String },
+  },
+  { timestamps: true }
+);
+
+const BandModel: Model<IBand> =
+  mongoose.models.Band || mongoose.model<IBand>("Band", BandSchema);
+
 export default BandModel;
