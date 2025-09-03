@@ -16,7 +16,18 @@ const BandSchema = new Schema<IBand>(
   },
   { timestamps: true }
 );
+// Not storing the members in the bands list
+// to not update bands everytime person is leaivng ar joining band 
+// just letting mongoose to compute it
+BandSchema.virtual("members", {
+  ref: "Member",       
+  localField: "_id",   
+  foreignField: "band"
+});
 
+/////////// To ensure virtuals appear in JSON output //////////////////
+BandSchema.set("toJSON", { virtuals: true });
+BandSchema.set("toObject", { virtuals: true });
 const BandModel: Model<IBand> =
   mongoose.models.Band || mongoose.model<IBand>("Band", BandSchema);
 
