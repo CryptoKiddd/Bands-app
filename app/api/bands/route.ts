@@ -41,7 +41,7 @@ export async function POST(req: Request) {
             );
         }
         return NextResponse.json(
-            { error: "Faildet to create Band", details: err.errors },
+            { error: "Faildet to create Band", details: err.message },
             { status: 400 }
         );
 
