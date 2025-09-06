@@ -1,19 +1,24 @@
 import dbConnect from "@/libs/db_connector";
+import { formatZodError } from "@/libs/helpers/formatZodError";
 import { BandRequestInput, sanitizeBandsObject } from "@/libs/validation/band";
-import BandModel, { IBand } from "@/models/Band";
+import BandModel from "@/models/Band";
+import MemberModel from "@/models/Memeber";
 import { NextResponse } from "next/server";
-
 
 
 
 export async function GET() {
   await dbConnect();
   try {
-    const bands = await BandModel.find({}).populate("members");;
+    const members = MemberModel.find({})
+    const bands = await BandModel.find({}).populate("members");
+    if(bands.length <= 0 ){
+       return NextResponse.json({message:"No bands"}, { status: 200 });
+    }
     return NextResponse.json(bands, { status: 200 });
-  } catch (err) {
+  } catch (err:any) {
     return NextResponse.json(
-      { error: "Failed to fetch bands" },
+      { error: "Failed to fetch bands", details:err.message },
       { status: 500 }
     );
   }
@@ -34,17 +39,8 @@ export async function POST(req: Request) {
 
 
     } catch (err: any) {
-        if (err.name === "ZodError") {
-            return NextResponse.json(
-                { error: "Validation failed", details: err.errors },
-                { status: 400 }
-            );
-        }
-        return NextResponse.json(
-            { error: "Faildet to create Band", details: err.message },
-            { status: 400 }
-        );
-
+      const formattedError = formatZodError(err)
+      return NextResponse.json(formattedError, {status:400})
 
     }
 }

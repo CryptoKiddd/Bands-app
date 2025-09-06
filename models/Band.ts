@@ -9,7 +9,7 @@ export interface IBand extends Document {
 
 const BandSchema = new Schema<IBand>(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique:true },
     genre: { type: String },
     description: { type: String },
     image: { type: String },
@@ -20,7 +20,7 @@ const BandSchema = new Schema<IBand>(
 // to not update bands everytime person is leaivng ar joining band 
 // just letting mongoose to compute it
 BandSchema.virtual("members", {
-  ref: "Member",       
+  ref: "members",       
   localField: "_id",   
   foreignField: "band"
 });

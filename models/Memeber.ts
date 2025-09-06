@@ -16,5 +16,5 @@ const MemberSchema = new Schema<IMemeber>({
 
 })
 
-const MemberModel: Model<IMemeber> = mongoose.models.Member || mongoose.model<IMemeber>("Member", MemberSchema);
+const MemberModel: Model<IMemeber> = mongoose.models.members || mongoose.model<IMemeber>("members", MemberSchema);
 export default MemberModel;
